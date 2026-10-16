@@ -34,6 +34,10 @@ migrate_working_dir/
 /coverage/
 .env
 
+# Local emulator captures. Keep only the curated gallery in docs/screenshots.
+/*.png
+/artifacts/emulator/
+
 # Symbolication related
 app.*.symbols
 
