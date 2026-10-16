@@ -47,7 +47,7 @@ flutter pub get
 flutter run
 ```
 
-On first launch, add your own Gemini API key or continue with the offline features. Later, open **Settings → sparkle icon** to add, replace, test, or delete the key and to choose a model. The local `.env` file is ignored by Git and is not bundled into the app.
+The welcome screen takes you straight into the app. To use AI features, open **Settings → sparkle icon** to add your own Gemini API key, test the connection, or choose a model. The local `.env` file is ignored by Git and is not bundled into the app.
 
 To build a debug APK, run `flutter build apk --debug`. The file will be at `build/app/outputs/flutter-apk/app-debug.apk`.
 

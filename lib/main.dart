@@ -164,7 +164,6 @@ class _ShellState extends State<Shell> {
     if (setup) {
       return SetupScreen(
         store: widget.store,
-        gemini: widget.gemini,
         onDone: () => setState(() => setup = false),
       );
     }
@@ -288,35 +287,20 @@ class _ShellState extends State<Shell> {
 }
 
 class SetupScreen extends StatefulWidget {
-  const SetupScreen({
-    super.key,
-    required this.store,
-    required this.gemini,
-    required this.onDone,
-  });
+  const SetupScreen({super.key, required this.store, required this.onDone});
   final AppDatabase store;
-  final GeminiService gemini;
   final VoidCallback onDone;
   @override
   State<SetupScreen> createState() => _SetupScreenState();
 }
 
 class _SetupScreenState extends State<SetupScreen> {
-  final keyController = TextEditingController();
   bool busy = false;
-  @override
-  void dispose() {
-    keyController.dispose();
-    super.dispose();
-  }
 
   Future<void> finish() async {
     setState(() => busy = true);
-    if (keyController.text.trim().isNotEmpty) {
-      await widget.gemini.saveKey(keyController.text);
-    }
     await widget.store.setSetting('setup_done', 'yes');
-    widget.onDone();
+    if (mounted) widget.onDone();
   }
 
   @override
@@ -380,37 +364,13 @@ class _SetupScreenState extends State<SetupScreen> {
                             'Your notes, tasks, chats, and files stay local.',
                           ),
                         ),
-                        ListTile(
-                          leading: SoftIcon(Icons.auto_awesome_outlined),
-                          title: Text('AI when you choose'),
-                          subtitle: Text(
-                            'Selected text is sent to Google for AI requests.',
-                          ),
-                        ),
                       ],
                     ),
                   ),
                   const SizedBox(height: 26),
-                  TextField(
-                    controller: keyController,
-                    obscureText: true,
-                    decoration: const InputDecoration(
-                      labelText: 'Gemini API key (optional)',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
                   FilledButton(
                     onPressed: busy ? null : finish,
                     child: const Text('Continue'),
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    'You can add an API key later in Settings.',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    ),
                   ),
                 ],
               ),
